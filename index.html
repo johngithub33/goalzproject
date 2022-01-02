@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Goalz</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div class='componentholder'>
+        <div>
+            <p> search: </p>
+            <input type="text" value=" input here"> 
+        </div>
+
+        <div>
+            <p> live text: </p>
+            <p class='displaytext'> </p>
+        </div>
+
+        <div>
+            <button class='regexbutton'> submit email </button>
+            <p class="showmatch"></p>
+        </div>
+    </div>
+
+    <!-- toggle 'novalidate' in form element to override all element 'required' -->
+    <form id='jamesform' action="" novalidate>
+        
+        <div>
+            <label for="fname"> first name: </label>
+            <input type="text" id="fname" name="fname" > 
+        </div>
+        
+        <div>
+            <label for="email"> email: </label>
+                <div>
+                    <input type="email" id="email" name="email" required>
+                    <span class='error' aria-live="polite"></span>
+                    <!-- <span class='error'></span> -->
+                </div>
+        </div>
+
+        <input type="radio">
+        <input type="checkbox">
+        <input type="submit" value='submit button'>
+        <input type="button" value='button button'>
+    </form>
+
+
+    <script src='script.js'></script>
+
+    <script>
+
+        
+        var getText = qs('input')
+        getText.style.fontStyle = 'italic'
+        getText.style.color = 'gray';
+
+        var showText = qs('.displaytext')
+        showText.style.color = 'black';
+
+        var getBtn = qs('.regexbutton');
+        var matchText = qs('.showmatch');
+
+        var globalCurrStr = '';
+        
+        
+        //erase placeholder text on initial focus
+        getText.addEventListener('focus', () => {
+            getText.value = '';
+        });
+
+        getText.addEventListener('input', () => {
+            showText.textContent = getText.value;              
+        });
+
+        //erase all text when lose focus to start over
+        getText.addEventListener('focusout', () => {
+            getText.value = ' input here';
+            globalCurrStr = showText.textContent;
+            showText.textContent = '';
+        });
+
+        getBtn.addEventListener('click', () => {
+            
+            if(emailRgxStr.test(globalCurrStr)){
+                matchText.textContent = 'match found'
+            } else matchText.textContent = 'not valid email address'
+           
+
+            var getFormData = qs('form')
+            pr(getFormData.children[0].children[1].value)
+
+        });
+
+
+        //form section
+        var getForm = qs('#jamesform')
+
+        //input field
+        var formInput = getForm.children[0].children[1]
+
+        //submit button
+        var formSubmitBtn = getForm.children[3]
+        var formBtnBtn = getForm.children[4]
+
+        formBtnBtn.addEventListener('click', () => {
+            pr(formInput.value);
+        })
+        
+        formSubmitBtn.addEventListener('click', () => {
+            pr(formInput.value)
+            pr('submit button clicked');
+        });
+
+        //VALIDITY
+        //test custom error messages
+        var emailfield = qs('#email')
+        var emailfieldValid = !emailfield.validity.typeMismatch;
+        const emailError = document.querySelector('#email + span.error');
+
+        email.addEventListener('input', () => {
+
+            emailfieldValid = !emailfield.validity.typeMismatch; 
+
+            //do when field not valid            
+            if(!emailfieldValid)
+            {
+                pr('in if stmt')
+                emailError.textContent = 'james custom error'
+                emailError.className = 'error active'
+            }
+
+            else{
+                pr('in else stmt')
+                emailError.textContent = '';
+                emailError.className = 'error';
+            }
+        });
+
+        
+        console.log(
+
+            // true if there is a typemismatch
+            emailfieldValid, " ",
+            emailfield.validity.typeMismatch, " ",
+            emailfield.validity.tooShort,
+            emailError
+
+        )
+        
+
+
+
+    </script>
+
+</body>
+</html>
