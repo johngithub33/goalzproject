@@ -16,102 +16,63 @@
 
 <body>
 
-    <div class='componentholder'>
-        <div>
-            <p> search: </p>
-            <input type="text" value=" input here"> 
-        </div>
-
-        <div>
-            <p> live text: </p>
-            <p class='displaytext'> </p>
-        </div>
-
-        <div>
-            <button class='regexbutton'> submit email </button>
-            <p class="showmatch"></p>
-        </div>
-    </div>
-
-
-    <form id='jamesform' action="/formsubmission" method="post" novalidate>
+    <form id='loginform' action="/formsubmission" method="post" novalidate>
         
         <div>
             <label for="fname"> first name: </label>
             <input type="text" id="fname" name="fname" > 
         </div>
+
+        <div>
+            <label for="lname"> last name: </label>
+            <input type="text" id="fname" name="fname" > 
+        </div>
+
         
         <div>
-            <label for="email"> email: </label>
                 <div>
-                    <input type="email" id="email" name="email" required>
+                    <label for="email"> email: </label>
+                    <input id="email" type="email" name="email" required>
                     <span class='error' aria-live="polite"></span>
-                    <!-- <span class='error'></span> -->
                 </div>
         </div>
 
-        <input type="radio">
-        <input type="checkbox">
         <input type="submit" value='submit button'>
         <input type="button" value='button button'>
     </form>
 
 
-    <script src='./public/script.js'></script>
-
     <script>
+        
+        //utils
         var pr = (x) => console.log(x);
         var qs = (x) => document.querySelector(x);
         var emailRgxStr = /\S+@\S+[.]\S/;
 
-        var getText = qs('input')
 
-        var showText = qs('.displaytext')
+        // var getText = qs('input')
+        // var showText = qs('.displaytext')
+        // var getBtn = qs('.regexbutton');
+        // var matchText = qs('.showmatch');
+        // var globalCurrStr = '';
 
-        var getBtn = qs('.regexbutton');
-        var matchText = qs('.showmatch');
+        //events: focus, input, focusout
+        //erase placeholder text on initial focus // focus: getText.value = '';
+        //input: showText.textContent = getText.value
+        //focusout: //erase all text when lose focus to start over
+        //click on getBtn: use emailRgsStr.text(globalCurrStr)
 
-        var globalCurrStr = '';
-
-     
-        //erase placeholder text on initial focus
-        getText.addEventListener('focus', () => {
-            getText.value = '';
-        });
-
-        getText.addEventListener('input', () => {
-            showText.textContent = getText.value;              
-        });
-
-        //erase all text when lose focus to start over
-        getText.addEventListener('focusout', () => {
-            getText.value = ' input here';
-            globalCurrStr = showText.textContent;
-            showText.textContent = '';
-        });
-
-        getBtn.addEventListener('click', () => {
-            
-            if(emailRgxStr.test(globalCurrStr)){
-                matchText.textContent = 'match found'
-            } else matchText.textContent = 'not valid email address'
-           
-
-            var getFormData = qs('form')
-            pr(getFormData.children[0].children[1].value)
-
-        });
 
         //***********************************************
         //main form section
-        var getForm = qs('#jamesform')
-        var formInput = getForm.children[0].children[1];
-        var formSubmitBtn = getForm.children[3]
-        var formBtnBtn = getForm.children[5]
-        
+        var getForm = qs('#loginform')
+        var firstName = getForm.children[0].children[1];
+        var formSubmitBtn = getForm.children[3];
+        var formBtnBtn = getForm.children[5];
+
         var globalMatch = false;
 
-        //form overall
+            //form overall
             getForm.addEventListener('submit', (e) => {
                 //e.preventDefault();
                 
@@ -120,12 +81,12 @@
                 }
             })
             
-        //input field
-            formInput.addEventListener('focus', () => { formInput.value = ''; })
+            //input field
+            firstName.addEventListener('focus', () => { firstName.value = ''; })
 
             //gets text character by character as you type in the box
-            formInput.addEventListener('input', () => {
-                if(emailRgxStr.test(formInput.value))
+            firstName.addEventListener('input', () => {
+                if(emailRgxStr.test(firstName.value))
                 {
                     pr('match')
                     globalMatch = true;
@@ -135,11 +96,11 @@
                 }
             })
 
-            formInput.addEventListener('focusout', () => { 
+            firstName.addEventListener('focusout', () => { 
                 // formInput.value = 'input here';
             })
 
-        //submit btn
+            //submit btn
             formSubmitBtn.addEventListener('submit', (e) => {
                 pr(formInput.value)
             })
@@ -147,25 +108,31 @@
         //VALIDITY
         //test custom error messages
         var emailfield = qs('#email')
-        var emailfieldValid = !emailfield.validity.typeMismatch;
-        const emailError = document.querySelector('#email + span.error');
 
+        //.validity object is internal JS error checking
+        var emailfieldValid = !emailfield.validity.typeMismatch;
+        
+        //selects the span under id=email
+        const emailErrorText = document.querySelector('#email + span.error');
+
+        //check during input
         email.addEventListener('input', () => {
 
             emailfieldValid = !emailfield.validity.typeMismatch; 
 
-            //do when field not valid            
+            //if field input not valid
             if(!emailfieldValid)
             {
-                pr('in if stmt')
-                emailError.textContent = 'james custom error'
-                emailError.className = 'error active'
+                //text that appears in red if error during input
+                emailErrorText.textContent = 'james custom error'
+                
+                //insert span class
+                emailErrorText.className = 'error active'
             }
 
             else{
-                pr('in else stmt')
-                emailError.textContent = '';
-                emailError.className = 'error';
+                emailErrorText.textContent = 'no error so far';
+                emailErrorText.className = 'error';
             }
         });
 

@@ -27,7 +27,11 @@ app.use(
     session(
         {secret:'james secret ssshhhhhhh',
         cookie: {httpOnly: false},
-        key: 'poopie.sid'}   
+        key: 'poopie.sid',
+        resave: false, //Forces the session to be saved back to the session store
+        //Forces a session that is “uninitialized” to be saved to the store. A session 
+        //is uninitialized when it is new but not modified. 
+        saveUninitialized: true}   
     ));
 
 

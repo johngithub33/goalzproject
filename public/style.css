@@ -1,43 +1,36 @@
 
 *{
-  font-family: 'Share Tech Mono', monospace; 
+  /* font-family: 'Share Tech Mono', monospace;  */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body{
     margin: 0;
-    background-image: linear-gradient(to right, rgb(231, 69, 96), rgb(8, 243, 0));
+    background-image: linear-gradient(to right, rgb(136, 1, 247), rgb(8, 243, 0));
 }
 
+#loginform{
 
+  width: 300px;
+  padding: 15px;
+  margin: 20px auto 0 auto;
+  
+  border-color: rgb(110, 110, 110);
+  border-style: solid;
+  border-radius: 5px;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 
-
-.componentholder{
-
-    width: 250px;
-    height: 150px;
-
-    border-radius: 5px;
-    border-color: gray;
-    border-style: solid;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    row-gap: 1px;
-    /* justify-content: center; */
-
-    margin: 10px 0 0 10px;
-    padding: 10px 0 0 10px;
 }
+
 
 div{
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    flex-direction: row;
 
-    /* margin-top: 10px;
-    margin-left: 15px; */
 }
 
 input{
@@ -63,17 +56,6 @@ input:focus{
 }
 
 
-form{
-    margin: 5px;
-    padding: 5px;
-    border-color: gray;
-    border-style: solid;
-    width: 370px;
-    align-items: flex-start;
-    gap: 5px;
-    display: flex;
-    flex-direction: column;
-}
 
 form label{
     margin: 0 5px 0 0;
@@ -94,7 +76,7 @@ form label{
   } */
 
 
-  /* [attr=value */
+  /* [attr=value] */
   input[type=email]{
     /* -webkit-appearance: none;
     appearance: none; */
@@ -134,14 +116,15 @@ form label{
     font-weight: 800;
   
     /* font-size: 80%; */
-    font-size: 12px;
+    font-size: 8px;
     color: white;
     background-color: red;
   
     /* box-sizing: border-box; */
   }
   
+  /* 2 classes used for active error */
   .error.active {
     /* padding: 0.3em; */
-    padding: 2px;
+    padding: 12px;
   }
