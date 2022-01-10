@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Goalz</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet"> 
+
+    <link rel="stylesheet" type='text/css' href="./public/style.css">
+</head>
+
+<body>
+
+    <div class='componentholder'>
+        <div>
+            <p> search: </p>
+            <input type="text" value=" input here"> 
+        </div>
+
+        <div>
+            <p> live text: </p>
+            <p class='displaytext'> </p>
+        </div>
+
+        <div>
+            <button class='regexbutton'> submit email </button>
+            <p class="showmatch"></p>
+        </div>
+
+        
+    </div>
+
+
+    <form id='jamesform' action="/formsubmission" method="post" novalidate>
+        
+        <div>
+            <label for="fname"> first name: </label>
+            <input type="text" id="fname" name="fname" > 
+        </div>
+        
+        <div>
+            <label for="email"> email: </label>
+                <div>
+                    <input type="email" id="email" name="email" required>
+                    <span class='error' aria-live="polite"></span>
+                    <!-- <span class='error'></span> -->
+                </div>
+        </div>
+
+        <input type="radio">
+        <input type="checkbox">
+        <input type="submit" value='submit button'>
+        <input type="button" value='button button'>
+    </form>
+
+    <br>
+    <br>
+    <p> <%= ejsVariable %></p>
+
+
+    <script src='./public/script.js'></script>
+
+    <script>
+       
+        var getText = qs('input')
+
+        var showText = qs('.displaytext')
+
+        var getBtn = qs('.regexbutton');
+        var matchText = qs('.showmatch');
+
+        var globalCurrStr = '';
+
+     
+        //erase placeholder text on initial focus
+        getText.addEventListener('focus', () => {
+            getText.value = '';
+        });
+
+        getText.addEventListener('input', () => {
+            showText.textContent = getText.value;              
+        });
+
+        //erase all text when lose focus to start over
+        getText.addEventListener('focusout', () => {
+            getText.value = ' input here';
+            globalCurrStr = showText.textContent;
+            showText.textContent = '';
+        });
+
+        getBtn.addEventListener('click', () => {
+            
+            if(emailRgxStr.test(globalCurrStr)){
+                matchText.textContent = 'match found'
+            } else matchText.textContent = 'not valid email address'
+           
+
+            var getFormData = qs('form')
+            pr(getFormData.children[0].children[1].value)
+
+        });
+
+        //***********************************************
+        //main form section
+        var getForm = qs('#jamesform')
+        var formInput = getForm.children[0].children[1];
+        var formSubmitBtn = getForm.children[3]
+        var formBtnBtn = getForm.children[5]
+        
+        var globalMatch = false;
+
+        //form overall
+            getForm.addEventListener('submit', (e) => {
+                //e.preventDefault();
+                
+                if(!globalMatch){
+                    // e.preventDefault();
+                }
+            })
+            
+        //input field
+            formInput.addEventListener('focus', () => { formInput.value = ''; })
+
+            //gets text character by character as you type in the box
+            formInput.addEventListener('input', () => {
+                if(emailRgxStr.test(formInput.value))
+                {
+                    pr('match')
+                    globalMatch = true;
+                } else {
+                    pr('no match') 
+
+                }
+            })
+
+            formInput.addEventListener('focusout', () => { 
+                // formInput.value = 'input here';
+            })
+
+        //submit btn
+            formSubmitBtn.addEventListener('submit', (e) => {
+                pr(formInput.value)
+            })
+
+        //VALIDITY
+        //test custom error messages
+        var emailfield = qs('#email')
+        var emailfieldValid = !emailfield.validity.typeMismatch;
+        const emailError = document.querySelector('#email + span.error');
+
+        email.addEventListener('input', () => {
+
+            emailfieldValid = !emailfield.validity.typeMismatch; 
+
+            //do when field not valid            
+            if(!emailfieldValid)
+            {
+                pr('in if stmt')
+                emailError.textContent = 'james custom error'
+                emailError.className = 'error active'
+            }
+
+            else{
+                pr('in else stmt')
+                emailError.textContent = '';
+                emailError.className = 'error';
+            }
+        });
+
+        
+
+        
+
+
+
+    </script>
+
+</body>
+</html>

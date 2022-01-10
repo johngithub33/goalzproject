@@ -6,10 +6,16 @@
     <meta name="viewport" content="width=, initial-scale=1.0">
     <title>Goalz</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet"> 
+
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" type='text/css' href="./public/style.css">
 </head>
+
 <body>
-    
+
     <div class='componentholder'>
         <div>
             <p> search: </p>
@@ -27,7 +33,7 @@
         </div>
     </div>
 
-    <!-- toggle 'novalidate' in form element to override all element 'required' -->
+
     <form id='jamesform' action="/formsubmission" method="post" novalidate>
         
         <div>
@@ -54,21 +60,20 @@
     <script src='./public/script.js'></script>
 
     <script>
+        var pr = (x) => console.log(x);
+        var qs = (x) => document.querySelector(x);
+        var emailRgxStr = /\S+@\S+[.]\S/;
 
-        
         var getText = qs('input')
-        getText.style.fontStyle = 'italic'
-        getText.style.color = 'gray';
 
         var showText = qs('.displaytext')
-        showText.style.color = 'black';
 
         var getBtn = qs('.regexbutton');
         var matchText = qs('.showmatch');
 
         var globalCurrStr = '';
-        
-        
+
+     
         //erase placeholder text on initial focus
         getText.addEventListener('focus', () => {
             getText.value = '';
@@ -97,25 +102,47 @@
 
         });
 
-
-        //form section
+        //***********************************************
+        //main form section
         var getForm = qs('#jamesform')
-
-        //input field
-        var formInput = getForm.children[0].children[1]
-
-        //submit button
+        var formInput = getForm.children[0].children[1];
         var formSubmitBtn = getForm.children[3]
-        var formBtnBtn = getForm.children[4]
-
-        formBtnBtn.addEventListener('click', () => {
-            pr(formInput.value);
-        })
+        var formBtnBtn = getForm.children[5]
         
-        formSubmitBtn.addEventListener('click', () => {
-            pr(formInput.value)
-            pr('submit button clicked');
-        });
+        var globalMatch = false;
+
+        //form overall
+            getForm.addEventListener('submit', (e) => {
+                //e.preventDefault();
+                
+                if(!globalMatch){
+                    // e.preventDefault();
+                }
+            })
+            
+        //input field
+            formInput.addEventListener('focus', () => { formInput.value = ''; })
+
+            //gets text character by character as you type in the box
+            formInput.addEventListener('input', () => {
+                if(emailRgxStr.test(formInput.value))
+                {
+                    pr('match')
+                    globalMatch = true;
+                } else {
+                    pr('no match') 
+
+                }
+            })
+
+            formInput.addEventListener('focusout', () => { 
+                // formInput.value = 'input here';
+            })
+
+        //submit btn
+            formSubmitBtn.addEventListener('submit', (e) => {
+                pr(formInput.value)
+            })
 
         //VALIDITY
         //test custom error messages
@@ -143,15 +170,7 @@
         });
 
         
-        console.log(
 
-            // true if there is a typemismatch
-            emailfieldValid, " ",
-            emailfield.validity.typeMismatch, " ",
-            emailfield.validity.tooShort,
-            emailError
-
-        )
         
 
 
