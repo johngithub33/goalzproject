@@ -8,6 +8,7 @@ var ejs = require('ejs')
 var cookieParser = require('cookie-parser'); //don't need cookie-parser for express-session to work
 var session = require('express-session');
 const { connect } = require('http2');
+var path = require('path')
 
 //app.use() - if no route specified first, middleware function called everytime server receives request
 
@@ -16,19 +17,28 @@ const { connect } = require('http2');
 //https://expressjs.com/en/resources/middleware/serve-static.html
 //https://www.npmjs.com/package/serve-static
 //the below is the same as app.use(serveStatic(__dirname) if you required ('serve-static))
-app.use(express.static(__dirname)).listen(4000);
+
+app.use("/public", express.static(__dirname + '/public'));
+
 
 //attaches parsed cookies to req object
 app.use(cookieParser())
 
-//cookie httpOnly: false means that you can then see the cookie with document.cookie with client side JS
+
+//express-session accepts these properties in the options object.
+//'cookie' is the Settings object for the session ID cookie. The default value 
+//is { path: '/', httpOnly: true, secure: false, maxAge: null }.
+
+//cookie {httpOnly: false} means that you can then see the cookie with document.cookie with client side JS
 //key: 'connect.sid' can be changed to whatever you want, connect.sid is the default
+
 app.use(
     session(
         {secret:'james secret ssshhhhhhh',
         cookie: {httpOnly: false},
-        key: 'poopie.sid',
-        resave: false, //Forces the session to be saved back to the session store
+        resave: true, //Forces the session to be saved back to the session store
+        maxAge: 120,
+       
         //Forces a session that is “uninitialized” to be saved to the store. A session 
         //is uninitialized when it is new but not modified. 
         saveUninitialized: true}   
@@ -52,32 +62,41 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }))
 
 
+app.get('/', (req,res) => {
+    res.sendFile(path.join(__dirname, '/index.html'))
+    // console.log('in root')
+    // res.cookie('initcookieagain', 'valueishere999').send();
+
+})
+
 app.get('/cookietest', (req,res) => {
     
     // res.cookie('name', 'express').send('cookie set'); //Sets name = express
-    // res.cookie('name', 'jamescookie').send('cookie set');
-    // res.cookie('othername', 'ricky123').send('cookie set')
-    // res.cookie('thirdnamecookie', 'thirdvalue123123123').send('cookie set')
-    // res.cookie('timedcookie', 'timernvalue', {maxAge: 6000}).send('cookie set')
+
+    //cookie stuff:
+    //req.session.cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: false }
+    //req.session.id = req.sessionID = something like a14PebUFoWJZclcHxNtdBbHqy7HgpEKv
+    //req.cookies['connect.sid']
+    //req.session: Session { cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: false }, pagevws: 2}
     
-    if(req.session.pagevws){
-        req.session.pagevws++;
+    
+    //cookie value is same/or linked to the sessionID, that's how you look up a user's cookie in the session store!
+    //see bottom comment in this stack overflow:
+    //https://stackoverflow.com/questions/56726972/express-session-the-difference-between-session-id-and-connect-sid
+    if(req.session.loggedIn){
+        // req.session.pagevws++;
+        console.log(req.session.loggedIn)
         res.send('multiple times here')
-        console.log(session.MemoryStore)
-        console.log(req.session, req.cookies['connect.sid'])
-        console.log('req.session.id:', req.session.id)
-        console.log('req.sessionID:', req.sessionID)
-        console.log('req.session.cookie:', req.session.cookie)
+        console.log('cookie value: ', req.cookies['james-connectAged.sid'], 'sessoinID: ', req.sessionID);
+
     }
     else{
-        req.session.pagevws = 1;
-        res.send('first time here')
+        // req.session.pagevws = 1;
+        // req.session.loggedIn = true;
         // console.log(req.session);
-        // console.log(req.cookies['connect.sid'])
+        // console.log('cookie value: ', req.cookies['james-connectAged.sid'], 'sessoinID: ', req.sessionID);
+        res.send('first time here')
     }
-
-
-    // console.log(req.cookies)
 })
 
 
@@ -145,4 +164,6 @@ function printToPage(res, req, myResult){
     }
 
 }
+
+app.listen(4000, () => {console.log('listening....')})
 

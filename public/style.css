@@ -9,6 +9,10 @@ body{
     background-image: linear-gradient(to right, rgb(136, 1, 247), rgb(8, 243, 0));
 }
 
+a{
+  
+}
+
 #loginform{
 
   width: 300px;
@@ -28,11 +32,6 @@ body{
 
 }
 
-
-div{
-
-}
-
 input{
 
     height: 20px;
@@ -43,11 +42,10 @@ input{
 }
 
 input:focus{
-    border-color: orange;
-    border-width: 3px;
-    border-style: solid;
-    outline: none;
+     outline: none;
 }
+
+
 
 
 .displaytext, .showmatch{
@@ -77,15 +75,10 @@ form label{
 
 
   /* [attr=value] */
-  input[type=email]{
-    /* -webkit-appearance: none;
-    appearance: none; */
-
-    /* background-color: greenyellow; */
-  
+  input[type=email]{  
     width: 100%;
     width: 150px;
-    border: 1px solid #333;
+    /* border: 1px solid #333; */
     margin: 0 10px 0 0;
   
     font-family: inherit;
@@ -94,17 +87,21 @@ form label{
     box-sizing: border-box;
   }
 
-
-  
-  /* This is our style for the invalid fields */
-  input:invalid{
+  .makeRed{
+    /* border: purple; */
     border-color: red;
-    border-width: 3px;
+  }
+  
+  /* This is our style for the invalid fields
+  input:invalid{
+    /* border-color: rgb(0, 195, 255);
+    border-width: 3px; 
   }
   
   input:focus:invalid {
     outline: none;
-  }
+  } 
+  */
   
   /* This is the style of our error messages */
   .error {

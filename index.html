@@ -25,9 +25,8 @@
 
         <div>
             <label for="lname"> last name: </label>
-            <input type="text" id="fname" name="fname" > 
+            <input type="text" id="lname" name="lname" > 
         </div>
-
         
         <div>
                 <div>
@@ -37,9 +36,13 @@
                 </div>
         </div>
 
-        <input type="submit" value='submit button'>
-        <input type="button" value='button button'>
+        <!-- <input type="submit" value='submit button'> -->
+        <button type="submit" value='submit button'> submit </button>
+        
     </form>
+
+    <a href="/cookietest" style="color: white;"> cookie test</a>
+
 
 
     <script>
@@ -48,99 +51,71 @@
         var pr = (x) => console.log(x);
         var qs = (x) => document.querySelector(x);
         var emailRgxStr = /\S+@\S+[.]\S/;
-
-
-        // var getText = qs('input')
-        // var showText = qs('.displaytext')
-        // var getBtn = qs('.regexbutton');
-        // var matchText = qs('.showmatch');
-        // var globalCurrStr = '';
-
-        //events: focus, input, focusout
-        //erase placeholder text on initial focus // focus: getText.value = '';
-        //input: showText.textContent = getText.value
-        //focusout: //erase all text when lose focus to start over
-        //click on getBtn: use emailRgsStr.text(globalCurrStr)
-
+        
 
         //***********************************************
         //main form section
         var getForm = qs('#loginform')
         var firstName = getForm.children[0].children[1];
+        firstName.value = "First Name";
+
+        var lastName = getForm.children[1].children[1];
+        lastName.value = "Last Name";
+
+        var emailField = getForm.children[2].children[0].children[1];
+        emailField.value = "Email Address";
+
         var formSubmitBtn = getForm.children[3];
-        var formBtnBtn = getForm.children[5];
 
-        var globalMatch = false;
+      
 
-            //form overall
-            getForm.addEventListener('submit', (e) => {
-                //e.preventDefault();
-                
-                if(!globalMatch){
-                    // e.preventDefault();
-                }
-            })
-            
-            //input field
-            firstName.addEventListener('focus', () => { firstName.value = ''; })
+        //make fields blank when clicked on
+        firstName.addEventListener('focus', () => { firstName.value = ''; })
+        lastName.addEventListener('focus', () => { lastName.value = ''; })
+        emailField.addEventListener('focus', () => { emailField.value = ''; })
 
-            //gets text character by character as you type in the box
-            firstName.addEventListener('input', () => {
-                if(emailRgxStr.test(firstName.value))
-                {
-                    pr('match')
-                    globalMatch = true;
-                } else {
-                    pr('no match') 
-
-                }
-            })
-
-            firstName.addEventListener('focusout', () => { 
-                // formInput.value = 'input here';
-            })
-
-            //submit btn
-            formSubmitBtn.addEventListener('submit', (e) => {
-                pr(formInput.value)
-            })
-
-        //VALIDITY
-        //test custom error messages
-        var emailfield = qs('#email')
-
-        //.validity object is internal JS error checking
-        var emailfieldValid = !emailfield.validity.typeMismatch;
-        
         //selects the span under id=email
-        const emailErrorText = document.querySelector('#email + span.error');
+        //the + sign: https://www.w3schools.com/cssref/css_selectors.asp
+        //the + selects the first element after the #email
+        //const emailErrorText = document.querySelector('#email + span.error');
+        let emailErrorText = qs('span.error');
 
-        //check during input
-        email.addEventListener('input', () => {
+        //check all submission strings
+        var allowSubmitEmail = false;
+        var allowSubmitFName = false;
+        var allowSubmitLName = false;
 
-            emailfieldValid = !emailfield.validity.typeMismatch; 
+        var allowSubmitTotal = { email: false, fname: false, lname: false};
+        allowSubmitTotal['email'] = true;
 
-            //if field input not valid
-            if(!emailfieldValid)
-            {
-                //text that appears in red if error during input
-                emailErrorText.textContent = 'james custom error'
-                
-                //insert span class
-                emailErrorText.className = 'error active'
+
+        function checkForm(){
+            allowSubmitFName = (firstName.value == '' || firstName.value =='First Name') ? false : true;
+            allowSubmitLName = (lastName.value == '' || lastName.value =='Last Name') ? false : true;
+            allowSubmitEmail = (emailRgxStr.test(emailField.value)) ? true : false;
+
+            if(allowSubmitFName && allowSubmitLName && allowSubmitEmail) return true;
+            else return false;
+
+        }
+
+        //submit form if email regex works (where allowSubmit set to true)
+        getForm.addEventListener('submit', (e) => {
+
+            //if not return true
+            if(!checkForm()){
+                e.preventDefault();
+
+                if(!allowSubmitEmail) emailField.className = 'makeRed'
+                if(!allowSubmitFName) firstName.className = 'makeRed'
+                if(!allowSubmitLName) lastName.className = 'makeRed'
             }
 
-            else{
-                emailErrorText.textContent = 'no error so far';
-                emailErrorText.className = 'error';
+            if(!emailRgxStr.test(emailField.value)){
+                emailErrorText.textContent = 'Please enter email.' 
             }
-        });
-
-        
-
-        
-
-
+            
+        })
 
     </script>
 
